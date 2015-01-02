@@ -28,6 +28,7 @@ var checksum = function (filePath) {
 }
 
 
+// get all the files in root, get their relative path
 var fileTree = function (root, serverFiles, done) {
 	watch.watchTree(root, function (files, curr, prev) {
 		if (typeof files == 'object' && curr == null && prev == null) {
@@ -103,31 +104,31 @@ if (global.test) {
 
 
 	describe('update', function () {
-		describe('checksum()', function () {
-			it('a sample', function (done) {
-				var root = temp.mkdirSync('case')
-				var filePath = path.join(root, 'file')
-				fs.writeFileSync(filePath, 'hello node')
-				checksum(filePath)(function (sum) {
-					assert.equal(sum, 'c3f5abe3e11d87d645b9e9fda1bad6a8d2f9e54f7e81478138ac134ba7ac7280')
-					done()
-				})
-			})
-		})
-
-
-		describe('fileTree()', function () {
-			it('a sample', function (done) {
-				var root = temp.mkdirSync('case')
-				fs.writeFileSync(path.join(root, '1'), '1')
-				fs.writeFileSync(path.join(root, '2'), '2')
-				fs.writeFileSync(path.join(root, '3'), '3')
-				fileTree(root, [] /* no use */, function (err, localFilePaths) {
-					assert.equal(localFilePaths.length, 3)
-					done()
-				})
-			})
-		})
+		//describe('checksum()', function () {
+		//	it('a sample', function (done) {
+		//		var root = temp.mkdirSync('case')
+		//		var filePath = path.join(root, 'file')
+		//		fs.writeFileSync(filePath, 'hello node')
+		//		checksum(filePath)(function (sum) {
+		//			assert.equal(sum, 'c3f5abe3e11d87d645b9e9fda1bad6a8d2f9e54f7e81478138ac134ba7ac7280')
+		//			done()
+		//		})
+		//	})
+		//})
+		//
+		//
+		//describe('fileTree()', function () {
+		//	it('a sample', function (done) {
+		//		var root = temp.mkdirSync('case')
+		//		fs.writeFileSync(path.join(root, '1'), '1')
+		//		fs.writeFileSync(path.join(root, '2'), '2')
+		//		fs.writeFileSync(path.join(root, '3'), '3')
+		//		fileTree(root, [] /* no use */, function (err, root, localFilePaths) {
+		//			assert.equal(localFilePaths.length, 3)
+		//			done()
+		//		})
+		//	})
+		//})
 
 
 		describe('diff', function () {
@@ -143,10 +144,18 @@ if (global.test) {
 					'2': '123', // '123' can not be real cheksum
 					'a/3': '123'
 				})(function (diffFiles) {
+					var ax = {'1': 'a', '2': 'b'}
+					console.log(diffFiles['2'])
+					var a = Object.keys(diffFiles)
+					console.log(a)
+					var b = a.length
+					console.log(b)
+					assert.equal(ax['1'], 1)
 					done()
-					//assert.equal(diffFiles['2'], 'write')
+
+					assert.equal(diffFiles['2'], 'write')
 					//assert.equal(diffFiles['a/3'], 'write')
-				})
+				}).done()
 			})
 		})
 	})
